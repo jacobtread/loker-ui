@@ -1,13 +1,13 @@
-import { defineConfig } from 'vite'
-import { svelte } from '@sveltejs/vite-plugin-svelte'
-import path from 'path'
+import { defineConfig } from 'vite';
+import solidPlugin from 'vite-plugin-solid';
+import devtools from 'solid-devtools/vite';
 
-// https://vite.dev/config/
 export default defineConfig({
-    plugins: [svelte()],
-    resolve: {
-        alias: {
-            "$lib": path.resolve(__dirname, "src", "lib"),
-        },
-    },
-})
+  plugins: [devtools(), solidPlugin()],
+  server: {
+    port: 3000,
+  },
+  build: {
+    target: 'esnext',
+  },
+});

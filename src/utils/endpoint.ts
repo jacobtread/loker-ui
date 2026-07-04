@@ -1,4 +1,3 @@
-
 export function getLokerEndpoint() {
     if (import.meta.env.DEV) {
         // In dev the endpoint is derived from the env variables
@@ -7,5 +6,5 @@ export function getLokerEndpoint() {
 
     // In release the web
     const url = window.location;
-    return `${url.protocol}:${url.hostname}${url.port.length > 0 ? ':' + url.port : ''}`;
+    return `${url.protocol}:${url.hostname}${url.port.length > 0 ? ":" + url.port : ""}`;
 }

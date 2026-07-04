@@ -1,29 +1,18 @@
-import { GetRandomPasswordCommand, SecretsManagerClient } from "@aws-sdk/client-secrets-manager";
-import { getContext, setContext } from "svelte";
+import {
+    GetRandomPasswordCommand,
+    SecretsManagerClient,
+} from "@aws-sdk/client-secrets-manager";
 import { getLokerEndpoint } from "../utils/endpoint";
+import { createSignal } from "solid-js";
 
-
-
-interface ClientStore {
-    client: SecretsManagerClient | null;
+export interface ClientStore {
+    client(): SecretsManagerClient | null;
     authenticate(accessKeyId: string, secretAccessKey: string): Promise<void>;
     logout(): void;
 }
 
-const CONTEXT_KEY = 'CLIENT_STORE';
-
-export const clientStoreContext = {
-    get(): ClientStore {
-        return getContext(CONTEXT_KEY)
-    },
-    set(value: ClientStore) {
-        setContext(CONTEXT_KEY, value);
-    }
-}
-
-
 export function createClientStore(): ClientStore {
-    let client: SecretsManagerClient | null = $state(null);
+    let [client, setClient] = createSignal<SecretsManagerClient | null>(null);
 
     async function authenticate(accessKeyId: string, secretAccessKey: string) {
         const newClient = new SecretsManagerClient({
@@ -31,27 +20,23 @@ export function createClientStore(): ClientStore {
             region: "us-east-1",
             credentials: {
                 accessKeyId,
-                secretAccessKey
+                secretAccessKey,
             },
-            endpoint: getLokerEndpoint()
+            endpoint: getLokerEndpoint(),
         });
 
         // Probe our authentication by trying to generate a random password
         await newClient.send(new GetRandomPasswordCommand({}));
-
-        client = newClient;
+        setClient(newClient);
     }
 
     function logout() {
-        client = null;
+        setClient(null);
     }
-
 
     return {
-        get client() {
-            return client;
-        },
+        client,
         authenticate,
-        logout
-    }
+        logout,
+    };
 }
