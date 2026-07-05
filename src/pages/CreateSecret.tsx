@@ -2,8 +2,10 @@ import {
     CreateSecretCommand,
     SecretsManagerClient,
 } from "@aws-sdk/client-secrets-manager";
-import { createSignal, For } from "solid-js";
+import { For } from "solid-js";
 import { createStore } from "solid-js/store";
+import * as FormField from "../components/FormField";
+import { mapUnknownError } from "../utils/error";
 
 interface Props {
     client: SecretsManagerClient;
@@ -110,11 +112,9 @@ export default function CreateSecret({ client, onBack }: Props) {
         <div>
             <button onClick={onBack}>Back</button>
             <form onSubmit={onCreate}>
-                <div>
-                    <label for="name">Name</label>
-                    <input
-                        id="name"
-                        name="name"
+                <FormField.Root id="name">
+                    <FormField.Label>Name</FormField.Label>
+                    <FormField.TextInput
                         type="text"
                         value={store.name}
                         onInput={[setTextInput, "name"]}
@@ -122,43 +122,37 @@ export default function CreateSecret({ client, onBack }: Props) {
                         minlength="1"
                         maxlength="512"
                     />
-                </div>
+                </FormField.Root>
 
-                <div>
-                    <label for="description">Description</label>
-                    <input
-                        id="description"
-                        name="description"
+                <FormField.Root id="description">
+                    <FormField.Label>Description</FormField.Label>
+                    <FormField.TextInput
                         type="text"
                         value={store.description}
                         onInput={[setTextInput, "description"]}
                         maxlength="2048"
                     />
-                </div>
+                </FormField.Root>
 
-                <div>
-                    <label for="secretString">Secret String</label>
-                    <input
-                        id="secretString"
-                        name="secretString"
+                <FormField.Root id="secretString">
+                    <FormField.Label>Secret String</FormField.Label>
+                    <FormField.TextInput
                         type="password"
                         value={store.secretString}
                         onInput={[setTextInput, "secretString"]}
                         maxlength="65536"
                     />
-                </div>
+                </FormField.Root>
 
-                <div>
-                    <label for="secretString">Secret Binary</label>
-                    <input
-                        id="secretBinary"
-                        name="v"
+                <FormField.Root id="secretBinary">
+                    <FormField.Label>Secret Binary</FormField.Label>
+                    <FormField.TextInput
                         type="password"
                         value={store.secretBinary}
                         onInput={[setTextInput, "secretBinary"]}
                         maxlength="65536"
                     />
-                </div>
+                </FormField.Root>
 
                 <div>
                     <p>Tags</p>
@@ -167,23 +161,18 @@ export default function CreateSecret({ client, onBack }: Props) {
                         {(tag, index) => {
                             return (
                                 <div>
-                                    <div>
-                                        <label for="secretString">Key</label>
-                                        <input
-                                            id="tag-{i}-key"
-                                            name="tag-{i}-key"
+                                    <FormField.Root id={`tag-${index()}-key`}>
+                                        <FormField.Label>Key</FormField.Label>
+                                        <FormField.TextInput
                                             type="text"
                                             value={store.tags[index()].key}
                                             onInput={[setTagKeyInput, index()]}
                                         />
-                                        n
-                                    </div>
+                                    </FormField.Root>
 
-                                    <div>
-                                        <label for="secretString">Value</label>
-                                        <input
-                                            id="tag-{i}-value"
-                                            name="tag-{i}-value"
+                                    <FormField.Root id={`tag-${index()}-value`}>
+                                        <FormField.Label>Value</FormField.Label>
+                                        <FormField.TextInput
                                             type="text"
                                             value={store.tags[index()].value}
                                             onInput={[
@@ -191,7 +180,7 @@ export default function CreateSecret({ client, onBack }: Props) {
                                                 index(),
                                             ]}
                                         />
-                                    </div>
+                                    </FormField.Root>
 
                                     <button
                                         type="button"

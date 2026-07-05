@@ -16,10 +16,6 @@ interface CreateSecretsStoreData {
 }
 
 interface SecretsStoreState {
-    secrets: SecretListEntry[];
-    loading: boolean;
-    error: Error | null;
-
     filters: Filter[];
 }
 
@@ -79,9 +75,6 @@ export function createSecretsStore({
 }: CreateSecretsStoreData): SecretsStore {
     const pagination = createSecretsPaginationStore();
     const [store, setStore] = createStore<SecretsStoreState>({
-        secrets: [],
-        loading: false,
-        error: null,
         filters: [],
     });
 

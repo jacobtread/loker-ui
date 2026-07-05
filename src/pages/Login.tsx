@@ -2,6 +2,8 @@ import { createStore } from "solid-js/store";
 import { Show } from "solid-js";
 import styles from "./Login.module.css";
 import { ClientStore } from "../stores/clientStore";
+import * as FormField from "../components/FormField";
+import { mapUnknownError } from "../utils/error";
 
 interface Props {
     clientStore: ClientStore;
@@ -51,27 +53,23 @@ export default function Login({ clientStore }: Props) {
     return (
         <div>
             <form class={styles.form} onsubmit={onSubmitLogin}>
-                <div>
-                    <label for="accessKeyId">Access Key ID</label>
-                    <input
-                        id="accessKeyId"
-                        name="accessKeyId"
+                <FormField.Root id="accessKeyId">
+                    <FormField.Label>Access Key ID</FormField.Label>
+                    <FormField.TextInput
                         type="text"
                         value={store.accessKeyId}
                         onInput={[setTextInput, "accessKeyId"]}
                     />
-                </div>
+                </FormField.Root>
 
-                <div>
-                    <label for="secretAccessKey">Access Key Secret</label>
-                    <input
-                        id="secretAccessKey"
-                        name="secretAccessKey"
+                <FormField.Root id="secretAccessKey">
+                    <FormField.Label>Access Key Secret</FormField.Label>
+                    <FormField.TextInput
                         type="password"
                         value={store.secretAccessKey}
                         onInput={[setTextInput, "secretAccessKey"]}
                     />
-                </div>
+                </FormField.Root>
 
                 <Show when={store.loading}>
                     <p>Loading...</p>

@@ -1,4 +1,4 @@
-function mapUnknownError(value: unknown) {
+export function mapUnknownError(value: unknown) {
     if (value instanceof Error) {
         return value;
     } else if (typeof value === "string") {
