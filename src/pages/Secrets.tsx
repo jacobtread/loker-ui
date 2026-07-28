@@ -16,7 +16,7 @@ export default function Secrets({ client }: Props) {
             <div class="toolbar">
                 <button
                     class="refresh-button"
-                    onclick={refetch}
+                    onClick={refetch}
                     disabled={secrets.loading}
                 >
                     Refresh
